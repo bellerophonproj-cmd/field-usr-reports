@@ -64,8 +64,9 @@ export async function action({ request }) {
   }
 
   try {
-    const formData = await request.formData();
-    const evidenceFile = formData.get("field_evidence");
+const formData = await request.formData();
+
+const evidenceFile = formData.get("field_evidence");
 
 console.log("FIELD EVIDENCE:", {
   exists: Boolean(evidenceFile && evidenceFile.size),
