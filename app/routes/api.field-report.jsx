@@ -106,7 +106,7 @@ export async function action({ request }) {
         `,
         variables: {
           metaobject: {
-            type: "field_use_report",
+            type: "field_use_reports",
             fields: [
               { key: "codename", value: codename },
               { key: "report_text", value: reportText },
@@ -118,7 +118,14 @@ export async function action({ request }) {
       }),
     });
 
-    const data = await response.json();
+    const raw = await response.text();
+
+let data;
+try {
+  data = JSON.parse(raw);
+} catch {
+  throw new Error("Shopify returned HTML/non-JSON: " + raw.slice(0, 300));
+}
     const result = data?.data?.metaobjectCreate;
 
     if (!response.ok || data.errors || result?.userErrors?.length) {
