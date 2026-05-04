@@ -2,7 +2,7 @@
 
 client_id = "5da3156ad53005fe14d49c98b6326d1d"
 name = "Field_usr_Reports"
-application_url = "https://example.com"
+application_url = "https://field-usr-reports-production.up.railway.app"
 embedded = true
 
 [build]
@@ -12,22 +12,22 @@ automatically_update_urls_on_dev = true
 api_version = "2026-07"
 
   [[webhooks.subscriptions]]
-  uri = "/webhooks/app/scopes_update"
-  topics = [ "app/scopes_update" ]
-
-  [[webhooks.subscriptions]]
   uri = "/webhooks/app/uninstalled"
   topics = [ "app/uninstalled" ]
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/app/scopes_update"
+  topics = [ "app/scopes_update" ]
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "write_metaobject_definitions,write_metaobjects,write_products"
 
 [auth]
-redirect_urls = [ "https://example.com/api/auth" ]
+redirect_urls = [ "https://field-usr-reports-production.up.railway.app/api/auth" ]
 
 [app_proxy]
-url = "https://docs-theater-hamilton-praise.trycloudflare.com"
+url = "https://field-usr-reports-production.up.railway.app/api/field-report"
 subpath = "field-report"
 prefix = "apps"
 
