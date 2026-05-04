@@ -65,6 +65,14 @@ export async function action({ request }) {
 
   try {
     const formData = await request.formData();
+    const evidenceFile = formData.get("field_evidence");
+
+console.log("FIELD EVIDENCE:", {
+  exists: Boolean(evidenceFile && evidenceFile.size),
+  name: evidenceFile?.name,
+  type: evidenceFile?.type,
+  size: evidenceFile?.size,
+});
 
     const codename = formData.get("codename") || "UNKNOWN OPERATOR";
     const productId = normalizeProductId(formData.get("product_id"));
