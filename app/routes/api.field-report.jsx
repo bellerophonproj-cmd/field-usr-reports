@@ -14,6 +14,37 @@ function normalizeProductId(productId) {
   return `gid://shopify/Product/${productId}`;
 }
 
+async function getShopifyAccessToken() {
+  const shop = process.env.SHOP;
+  const clientId = process.env.SHOPIFY_API_KEY;
+  const clientSecret = process.env.SHOPIFY_API_SECRET;
+
+  if (!shop || !clientId || !clientSecret) {
+    throw new Error("Missing SHOP, SHOPIFY_API_KEY, or SHOPIFY_API_SECRET.");
+  }
+
+  const body = new URLSearchParams();
+  body.set("grant_type", "client_credentials");
+  body.set("client_id", clientId);
+  body.set("client_secret", clientSecret);
+
+  const response = await fetch(`https://${shop}/admin/oauth/access_token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body,
+  });
+
+  const data = await response.json();
+
+  if (!response.ok || !data.access_token) {
+    throw new Error("Unable to retrieve Shopify access token: " + JSON.stringify(data));
+  }
+
+  return data.access_token;
+}
+
 export async function loader() {
   return Response.json(
     {
@@ -50,23 +81,13 @@ export async function action({ request }) {
     }
 
     const shop = process.env.SHOP;
-    const token = process.env.ADMIN_API_TOKEN;
-
-    if (!shop || !token) {
-      return Response.json(
-        {
-          success: false,
-          error: "Missing SHOP or ADMIN_API_TOKEN environment variable.",
-        },
-        { status: 500, headers: corsHeaders }
-      );
-    }
+    const accessToken = await getShopifyAccessToken();
 
     const response = await fetch(`https://${shop}/admin/api/2026-07/graphql.json`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-Shopify-Access-Token": token,
+        "X-Shopify-Access-Token": accessToken,
       },
       body: JSON.stringify({
         query: `
@@ -90,10 +111,10 @@ export async function action({ request }) {
               { key: "codename", value: codename },
               { key: "report_text", value: reportText },
               { key: "status", value: "pending" },
-              { key: "related_product", value: productId }
-            ]
-          }
-        }
+              { key: "related_product", value: productId },
+            ],
+          },
+        },
       }),
     });
 
