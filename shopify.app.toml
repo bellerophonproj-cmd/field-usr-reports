@@ -20,7 +20,6 @@ api_version = "2026-07"
   topics = [ "app/scopes_update" ]
 
 [access_scopes]
-# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "write_products,write_metaobject_definitions,write_metaobjects,read_files,write_files"
 
 [auth]
