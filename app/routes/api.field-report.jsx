@@ -202,6 +202,7 @@ export async function action({ request }) {
     const codename = formData.get("codename") || "UNKNOWN OPERATOR";
     const productId = normalizeProductId(formData.get("product_id"));
     const reportText = formData.get("report_text");
+    const classification = formData.get("classification") || "FIELD TESTED";
     const evidenceFile = formData.get("field_evidence");
 
     if (!productId || !reportText) {
@@ -222,6 +223,7 @@ const fields = [
   { key: "status", value: "pending" },
   { key: "related_product", value: productId },
   { key: "report_date", value: reportDate },
+  { key: "classification", value: classification },
 ];
     if (evidenceFileId) {
       fields.push({ key: "field_evidence", value: evidenceFileId });
