@@ -214,13 +214,15 @@ export async function action({ request }) {
     const accessToken = await getShopifyAccessToken();
     const evidenceFileId = await uploadEvidenceToShopify(evidenceFile, accessToken);
 
-    const fields = [
-      { key: "codename", value: codename },
-      { key: "report_text", value: reportText },
-      { key: "status", value: "pending" },
-      { key: "related_product", value: productId },
-    ];
+const reportDate = new Date().toISOString();
 
+const fields = [
+  { key: "codename", value: codename },
+  { key: "report_text", value: reportText },
+  { key: "status", value: "pending" },
+  { key: "related_product", value: productId },
+  { key: "report_date", value: reportDate },
+];
     if (evidenceFileId) {
       fields.push({ key: "field_evidence", value: evidenceFileId });
     }
